@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <div className={styles.navbar}>
       <h2 className={styles.title}>Habitfam</h2>
-      <Button shadow rounded color="error" auto>
+      <Button shadow rounded color="error" css={{ fontSize: "1.1rem" }} auto>
         Sign Up / Login
       </Button>
     </div>
