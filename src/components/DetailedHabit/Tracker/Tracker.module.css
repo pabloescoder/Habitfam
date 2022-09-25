@@ -1,0 +1,18 @@
+.tracker-container {
+  background-color: #f4eeff;
+  margin: 1.5rem;
+  padding: 0.5rem 1rem;
+  padding-left: 0;
+  flex-basis: 100%;
+  color: #2a2e4d;
+  border-radius: 16px;
+  height: 46vh;
+  overflow: auto;
+}
+
+.tracker-container h3 {
+  font-weight: 700;
+  text-align: center;
+  color: #2a2e4d;
+  font-size: 2rem;
+}

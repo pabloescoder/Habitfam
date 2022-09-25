@@ -1,0 +1,21 @@
+.tracker-row-container {
+  display: flex;
+}
+
+.user-details {
+  margin: 0;
+  padding-left: 10px;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+  text-overflow: ellipsis;
+  width: 20%;
+  border-radius: 0 20px 20px 0;
+  background-color: #dcd6f7;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2a2e4d;
+  margin-bottom: -5px;
+}

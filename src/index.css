@@ -14,3 +14,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #dcd6f7;
 }
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #2a2e4d #f4eeff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f4eeff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #2a2e4d;
+  border-radius: 16px;
+  border: 2px solid #ffffff;
+}
