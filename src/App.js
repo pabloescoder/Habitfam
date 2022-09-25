@@ -1,9 +1,11 @@
 import "./App.css";
 import User from "./models/user";
+import { firebaseRegister } from "./services/authentication_service";
 
 
 function App() {
-  var u = new User("UID_STRING", "algorithm@me.com");
+
+
   return (
     <div>
       <div>
