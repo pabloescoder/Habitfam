@@ -15,17 +15,20 @@ const auth = getAuth(firebaseInstance)
  * @returns {User} user 
  */
 export async function firebaseSignIn(email, password) {
+    var res;
     await signInWithEmailAndPassword(auth, email, password).then(
         async (user) => {
             var result = new User(user.user.uid, user.user.email);
             result = await getUserFromDatabase(result);
-            return result;
+            res = result;
         }
     ).catch(
         (error) => {
             console.log(error);
         }
     );
+
+    return res;
 }
 
 /**
@@ -36,16 +39,19 @@ export async function firebaseSignIn(email, password) {
  * @returns {User} user
  */
 export async function firebaseRegister(email, password, name) {
+    var res;
     await createUserWithEmailAndPassword(auth, email, password).then(
         async (user) => {
             var result = new User(user.user.uid, user.user.email);
             result.name = name;
             await addUserToDatabase(result);
-            return result;
+            res = result;
         }
     ).catch(
         (error) => {
             console.log(error);
         }
     );
+
+    return res;
 }
