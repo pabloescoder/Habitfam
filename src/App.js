@@ -12,9 +12,9 @@ function App() {
   return (
     <NextUIProvider>
       <Navbar />
-      <div className="page">
-      <Enterhabit />
-    </div>
+      {/* <div className="page"> */}
+      {/* <Enterhabit /> */}
+    {/* </div> */}
       <Routes>
         <Route path="/detailed-habit" element={<DetailedHabit />}></Route>
       </Routes>
