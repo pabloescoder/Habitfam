@@ -1,16 +1,4 @@
-import {
-  doc,
-  getDoc,
-  getFirestore,
-  setDoc,
-  addDoc,
-  collection,
-  getDocs,
-  where,
-  query,
-  orderBy,
-} from "firebase/firestore";
-
+import {doc, getDoc, getFirestore, setDoc, addDoc, collection, getDocs, where, query, orderBy} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../config/firebase_config";
 import User from "../models/user";
@@ -24,38 +12,37 @@ const db = getFirestore(firebaseInstance);
 /**
  * function adds user information from database
  * @param {User} user user object
- * @returns {boolean}
+ * @returns {boolean}  
  */
 export async function addUserToDatabase(user) {
-  var res = false;
-  await setDoc(doc(db, "users", user.uid), user.userMap)
-    .then((val) => {
-      res = true;
-    })
-    .catch((err) => {
-      return false;
+    var res = false;
+    await setDoc(doc(db, "users", user.uid), user.userMap).then((val) => {
+        res = true;
+    }).catch((err) => {
+        return false;
     });
 
-  return res;
+    return res;
 }
+
 
 /**
  * function retrives user information from database
- * @param {User} user
+ * @param {User} user 
  * @returns {User} user
  */
 export async function getUserFromDatabase(user) {
-  var res;
-  await getDoc(doc(db, "users", user.uid))
-    .then((doc) => {
-      console.log(doc.data.length);
-      user.name = doc.data["name"];
-      // TODO: adding habit group information
-      res = user;
-    })
-    .catch((err) => {});
+    var res;
+    await getDoc(doc(db, "users", user.uid)).then(
+        (doc) => {
+            console.log(doc.data.length);
+            user.name = doc.data["name"];
+            // TODO: adding habit group information
+            res = user;
+        }
+    ).catch((err) => {});
 
-  return res;
+    return res;
 }
 
 /**
@@ -63,18 +50,20 @@ export async function getUserFromDatabase(user) {
  * @param {String} uid firebase uid
  * @return {HabitGroupMember} member
  */
-export async function getMemberProfile(uid) {
-  var profile;
-  await getDoc(doc(db, "users", uid))
-    .then((doc) => {
-      profile = new User(doc.id, doc.data()["email"]);
-      profile.name = doc.data()["name"];
-    })
-    .catch((err) => {
-      profile = err.code;
-    });
+ export async function getMemberProfile(uid) {
+    var profile;
+    await getDoc(doc(db, "users", uid)).then(
+        (doc) => {
+            profile = new User(doc.id, doc.data()["email"]);
+            profile.name = doc.data()["name"];
+        }
+    ).catch(
+        (err) => {
+            profile = err.code;
+        }
+    )
 
-  return profile;
+    return profile;
 }
 
 /**
@@ -83,134 +72,128 @@ export async function getMemberProfile(uid) {
  * @return {Array} habit_group_list
  */
 export async function getMyHabitGroups(user) {
-  var myHabitGroups = [];
-  var qry = query(
-    collection(db, "habit_group"),
-    where("members", "array-contains", user.uid)
-  );
-  var q = await getDocs(qry)
-    .then((qs) => {
-      qs.docs.forEach((val, index) => {
-        var curr = new HabitGroup(
-          val.id,
-          val.data()["founder"],
-          val.data()["title"],
-          val.data()["desc"],
-          val.data()["start"],
-          val.data()["end"]
-        );
-        var memeber_map = {};
-        val.data()["members"].forEach((val, index) => {
-          memeber_map[val] = new HabitGroupMember(val, "", "");
-        });
+    var myHabitGroups = [];
+    var qry = query(collection(db, "habit_group"),where("members", "array-contains", user.uid));
+    var q = await getDocs(qry).then(
+        (qs) => {
+            qs.docs.forEach(
+                (val, index) => {
+                    var curr = new HabitGroup(val.id, val.data()["founder"], val.data()["title"], val.data()["desc"], val.data()["start"], val.data()["end"]);
+                    var memeber_map = {};
+                    val.data()["members"].forEach(
+                        (val, index) => {
+                            memeber_map[val] = new HabitGroupMember(val, "", "");
+                        }
+                    );
 
-        curr.habit_group_memebers = memeber_map;
-        myHabitGroups.push(curr);
-      });
-    })
-    .catch((err) => {
-      console.log(err.code);
-    });
+                    curr.habit_group_memebers = memeber_map;
+                    myHabitGroups.push(
+                        curr
+                    );
+                }
+            )
+        }
+    ).catch(
+        (err) => {
+            console.log(err.code);
+        }
+    );
 
-  return myHabitGroups;
+    return myHabitGroups;
+
 }
 
 /**
  * returns detailed profile of habit group memebers
- * @param {HabitGroup} hbg
+ * @param {HabitGroup} hbg 
  */
 export async function getHabitGroupMembers(hbg) {
-  var new_habit_group_members = {};
+    var new_habit_group_members = {};
 
-  Object.keys(hbg.habit_group_memebers).forEach(async (val, index) => {
-    var profile_of_val = await getMemberProfile(val);
-    new_habit_group_members[val] = profile_of_val;
-  });
+    Object.keys(hbg.habit_group_memebers).forEach(
+        async (val, index) => {
+            var profile_of_val = await getMemberProfile(val);
+            new_habit_group_members[val] = profile_of_val;
+        }
+    )
 
-  hbg.habit_group_memebers = new_habit_group_members;
-  return hbg;
+    hbg.habit_group_memebers = new_habit_group_members;
+    return hbg;
 }
 
 /**
  * returns the habit log of all the members
- * @param {HabitGroup} habit
+ * @param {HabitGroup} habit 
  * @return {HabitGroup} habit group with log
  */
 export async function getMemebersHabitLog(habit) {
-  var new_habit_group_members = habit.habit_group_memebers;
+    var new_habit_group_members = habit.habit_group_memebers;
 
-  await getDocs(
-    query(
-      collection("db", "habit_log"),
-      where("habit_group_id", "==", habit.habit_group_id),
-      orderBy("timestamp")
-    )
-  )
-    .then((qs) => {
-      qs.forEach((doc) => {
-        var curr_log = new HabitLog(
-          habit.habit_group_id,
-          doc.data()["timestamp"],
-          doc.data()["user"]
-        );
+    await getDocs(query(
+        collection("db", "habit_log"), where("habit_group_id", "==", habit.habit_group_id), orderBy("timestamp")
+    )).then(
+        (qs) => {
 
-        curr_log.logId = doc.id;
+            qs.forEach(
+                (doc) => {
+                    var curr_log = new HabitLog(
+                        habit.habit_group_id, 
+                        doc.data()["timestamp"],
+                        doc.data()["user"]
+                    );
 
-        new_habit_group_members[doc.data()["user"]].habit_log.push(curr_log);
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+                    curr_log.logId = doc.id;
 
-  habit.habit_group_memebers = new_habit_group_members;
+                    new_habit_group_members[doc.data()["user"]].habit_log.push(
+                        curr_log
+                    );
+                }
+            )
+        }
+    ).catch(
+        (err) => {
+            console.log(err);
+        }
+    );
+    
+    habit.habit_group_memebers = new_habit_group_members;
 
-  return habit;
+    return habit;
 }
 
 /**
  * creates a new habit group
  * @param {User} user founder user
- * @param {String} habitTitle
- * @param {String} habitDescription
- * @param {Date} start
- * @param {Date} end
+ * @param {String} habitTitle 
+ * @param {String} habitDescription 
+ * @param {Date} start 
+ * @param {Date} end 
  * @return {HabitGroup} habitgroup
  */
-export async function createHabitGroup(
-  user,
-  habitTitle,
-  habitDescription,
-  start,
-  end
-) {
-  var res;
-  await addDoc(collection(db, "habit_group"), {
-    founder: user.uid,
-    title: habitTitle,
-    desc: habitDescription,
-    start: start,
-    end: end,
-    members: [user.uid],
-  })
-    .then((doc) => {
-      console.log(doc);
-      console.log(doc.id);
 
-      res = new HabitGroup(
-        doc.id,
-        user.uid,
-        habitTitle,
-        habitDescription,
-        start,
-        end
-      );
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+export async function createHabitGroup(user, habitTitle, habitDescription, start, end) {
+    var res;
+    await addDoc(collection(db, "habit_group"), {
+        "founder" : user.uid,
+        "title" : habitTitle,
+        "desc" : habitDescription,
+        "start" : start,
+        "end" : end,
+        "members" : [user.uid] 
+    }).then(
+        (doc) => {
+            console.log(doc);
+            console.log(doc.id);
 
-  return res;
+            res = new HabitGroup(doc.id, user.uid, habitTitle, habitDescription, start, end);
+        }
+    ).catch(
+        (err) => {
+            console.log(err);
+        }
+    );
+
+    return res;
 }
 
 /**
@@ -220,19 +203,21 @@ export async function createHabitGroup(
  * @return {HabitLog} habit log
  */
 export async function createHabitLog(user, habit) {
-  var res;
-  await addDoc(collection(db, "habit_log"), {
-    habit_group_id: habit.habit_group_id,
-    user: user.uid,
-    timestamp: Date.now(),
-  })
-    .then((val) => {
-      res = new HabitLog(habit.habit_group_id, Date.now(), user);
-      res.logId = val.id;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    var res;
+    await addDoc(collection(db, "habit_log"), {
+        'habit_group_id' : habit.habit_group_id,
+        'user' : user.uid,
+        'timestamp' : Date.now()
+    }).then(
+        (val) => {
+            res = new HabitLog(habit.habit_group_id, Date.now(), user);
+            res.logId = val.id;
+        }
+    ).catch(
+        (err) => {
+            console.log(err);
+        }
+    )
 
-  return res;
+    return res;
 }
