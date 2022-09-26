@@ -8,7 +8,6 @@
 class User{
     #uid;
     #email;
-    #myhabit_groups = [];
     /**
      * 
      * @param {String} uid [firebase uid]
@@ -20,7 +19,6 @@ class User{
         this.#email = email;
         /**@param {String} [name of user] */
         this.name = "";
-        this.#myhabit_groups = []
     }
 
     /**
@@ -37,23 +35,12 @@ class User{
         return this.#email;
     }
 
-    get myHabitGroups() {
-        return this.#myhabit_groups;
-    }
 
     get userMap() {
         return {
             "name": this.name,
             "email" : this.email,
-            "habit_groups" : this.myHabitGroups
         }
-    }
-
-    /**
-     * adds habit-group id to a user
-    */
-    set addHabitGroupString(val) {
-        this.#myhabit_groups.push(val);
     }
 }
 
