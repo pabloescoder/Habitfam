@@ -16,7 +16,7 @@ const db = getFirestore(firebaseInstance);
  */
 export async function addUserToDatabase(user) {
     var res = false;
-    await addDoc(doc(db, "users", user.uid), user.userMap).then((val) => {
+    await setDoc(doc(db, "users", user.uid), user.userMap).then((val) => {
         res = true;
     }).catch((err) => {
         return false;
