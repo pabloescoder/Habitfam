@@ -5,7 +5,7 @@ import "./Enterhabit.css";
 
 const Enterhabit = () => {
   return (
-    <div className="cover">
+    <div className="cover" style={{ display: "flex", margin: "2rem auto" }}>
       <Grid.Container gap={2}>
         <Grid>
           <Button light color="error" auto>
