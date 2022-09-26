@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { NextUIProvider } from "@nextui-org/react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/UI/Navbar";
@@ -10,16 +9,6 @@ import Enterhabit from "./components/Enterhabit/Enterhabit";
 function App() {
   console.log(firebaseConfig);
 
-=======
-import { async } from "@firebase/util";
-import "./App.css";
-import { firebaseConfig } from "./config/firebase_config";
-import User from "./models/user";
-import { firebaseRegister, firebaseSignIn } from "./services/authentication_service";
-
-
-async function App() {
->>>>>>> dev-abhinav
   return (
     <NextUIProvider>
       <Navbar />
