@@ -30,7 +30,7 @@ async function firebaseIntegration() {
 
 function App() {
   const authCtx = useContext(AuthContext);
-  firebaseIntegration();
+  // firebaseIntegration();
 
   return (
     <NextUIProvider>

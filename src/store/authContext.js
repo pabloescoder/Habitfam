@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import {
+  firebaseSignIn,
+  firebaseRegister,
+} from "../services/authentication_service";
 
 const AuthContext = React.createContext({
   showModal: false,
@@ -18,23 +22,40 @@ export const AuthContextProvider = (props) => {
   };
 
   const loginHandler = async (email, password) => {
-    localStorage.setItem("isLoggedIn", "1");
+    const user = await firebaseSignIn(email, password);
+
+    const userObj = {
+      name: user.name,
+      email: user.email,
+      uid: user.uid,
+      myHabitGroups: user.myHabitGroups,
+    };
+
+    localStorage.setItem("userObj", JSON.stringify(userObj));
     setIsLoggedIn(true);
+    setShowModal(false);
   };
 
-  const signinHandler = async (email, password) => {
-    console.log(email, password);
+  const signinHandler = async (email, password, name) => {
+    const user = await firebaseRegister(email, password, name);
+    console.log(user);
+    setShowModal(false);
+    setShowModal(true);
   };
 
   const logoutHandler = () => {
-    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userObj");
     setIsLoggedIn(false);
   };
 
   useEffect(() => {
-    const storedisLoggedIn = localStorage.getItem("isLoggedIn");
-    if (storedisLoggedIn === "1") {
+    let userObj = localStorage.getItem("userObj");
+    if (userObj) {
+      userObj = JSON.parse(userObj);
+      console.log(userObj?.uid);
       setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
   }, []);
 

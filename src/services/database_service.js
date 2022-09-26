@@ -1,4 +1,11 @@
-import {doc, getDoc, getFirestore, setDoc, addDoc, collection} from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../config/firebase_config";
 import User from "../models/user";
@@ -11,37 +18,38 @@ const db = getFirestore(firebaseInstance);
 /**
  * function adds user information from database
  * @param {User} user user object
- * @returns {boolean}  
+ * @returns {boolean}
  */
 export async function addUserToDatabase(user) {
-    var res = false;
-    await addDoc(doc(db, "users", user.uid), user.userMap).then((val) => {
-        res = true;
-    }).catch((err) => {
-        return false;
+  var res = false;
+  await setDoc(doc(db, "users", user.uid), user.userMap)
+    .then((val) => {
+      res = true;
+    })
+    .catch((err) => {
+      return false;
     });
 
-    return res;
+  return res;
 }
-
 
 /**
  * function retrives user information from database
- * @param {User} user 
+ * @param {User} user
  * @returns {User} user
  */
 export async function getUserFromDatabase(user) {
-    var res;
-    await getDoc(doc(db, "users", user.uid)).then(
-        (doc) => {
-            console.log(doc.data.length);
-            user.name = doc.data["name"];
-            // TODO: adding habit group information
-            res = user;
-        }
-    ).catch((err) => {});
+  var res;
+  await getDoc(doc(db, "users", user.uid))
+    .then((doc) => {
+      console.log(doc.data.length);
+      user.name = doc.data["name"];
+      // TODO: adding habit group information
+      res = user;
+    })
+    .catch((err) => {});
 
-    return res;
+  return res;
 }
 
 /**
@@ -49,8 +57,8 @@ export async function getUserFromDatabase(user) {
  * @param {String} uid firebase uid
  * @return {HabitGroupMember} member
  */
- export async function getMemberInformation(uid) {
-    // TODOD: implement
+export async function getMemberInformation(uid) {
+  // TODOD: implement
 }
 
 /**
@@ -60,39 +68,49 @@ export async function getUserFromDatabase(user) {
  */
 
 export async function getMyHabitGroups(user) {
-    // TODO: Implement
+  // TODO: Implement
 }
 
 /**
  * creates a new habit group
  * @param {User} user founder user
- * @param {String} habitTitle 
- * @param {String} habitDescription 
- * @param {Date} start 
- * @param {Date} end 
+ * @param {String} habitTitle
+ * @param {String} habitDescription
+ * @param {Date} start
+ * @param {Date} end
  * @return {HabitGroup} habitgroup
  */
-export async function createHabitGroup(user, habitTitle, habitDescription, start, end) {
-    var res;
-    await addDoc(collection(db, "habit_group"), {
-        "founder" : user.uid,
-        "title" : habitTitle,
-        "desc" : habitDescription,
-        "start" : start,
-        "end" : end
-    }).then(
-        (doc) => {
-            console.log(doc);
-            console.log(doc.id);
+export async function createHabitGroup(
+  user,
+  habitTitle,
+  habitDescription,
+  start,
+  end
+) {
+  var res;
+  await addDoc(collection(db, "habit_group"), {
+    founder: user.uid,
+    title: habitTitle,
+    desc: habitDescription,
+    start: start,
+    end: end,
+  })
+    .then((doc) => {
+      console.log(doc);
+      console.log(doc.id);
 
-            res = new HabitGroup(doc.id, user.uid, habitTitle, habitDescription, start, end);
-        }
-    ).catch(
-        (err) => {
-            console.log(err);
-        }
-    );
+      res = new HabitGroup(
+        doc.id,
+        user.uid,
+        habitTitle,
+        habitDescription,
+        start,
+        end
+      );
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-    return res;
+  return res;
 }
-

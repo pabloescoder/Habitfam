@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import AuthContext from "../../store/authContext";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 const AuthModal = () => {
   const authCtx = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const handleAuthModeToggle = () => {
     setIsLogin((prevState) => !prevState);
@@ -32,28 +35,37 @@ const AuthModal = () => {
             <Input
               clearable
               bordered
+              ref={nameRef}
+              name="name"
               fullWidth
               color="primary"
               size="lg"
               placeholder="Name"
+              aria-label="Name"
             />
           )}
           <Input
             clearable
             bordered
+            ref={emailRef}
+            name="email"
             fullWidth
             color="primary"
             size="lg"
             placeholder="Email"
+            aria-label="Email"
           />
           <Input
             clearable
             bordered
+            ref={passwordRef}
+            name="password"
             fullWidth
             type="password"
             color="primary"
             size="lg"
             placeholder="Password"
+            aria-label="Password"
           />
           <Row justify="space-between">
             <Checkbox>
@@ -72,7 +84,26 @@ const AuthModal = () => {
           <Button auto flat color="error" onClick={authCtx.toggleModal}>
             Close
           </Button>
-          <Button auto onClick={authCtx.onLogin}>
+          <Button
+            auto
+            onClick={
+              isLogin
+                ? () => {
+                    authCtx.onLogin(
+                      emailRef.current.value,
+                      passwordRef.current.value
+                    );
+                  }
+                : async () => {
+                    await authCtx.onSignin(
+                      emailRef.current.value,
+                      passwordRef.current.value,
+                      nameRef.current.value
+                    );
+                    handleAuthModeToggle();
+                  }
+            }
+          >
             {isLogin ? "Login" : "Sign Up"}
           </Button>
         </Modal.Footer>
