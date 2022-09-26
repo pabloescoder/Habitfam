@@ -37,11 +37,23 @@ class User{
         return this.#email;
     }
 
+    get myHabitGroups() {
+        return this.#myhabit_groups;
+    }
+
+    get userMap() {
+        return {
+            "name": this.name,
+            "email" : this.email,
+            "habit_groups" : this.myHabitGroups
+        }
+    }
+
     /**
      * adds habit-group id to a user
-     */
+    */
     set addHabitGroupString(val) {
-        this.#myhabit_groups.push(val)
+        this.#myhabit_groups.push(val);
     }
 }
 
