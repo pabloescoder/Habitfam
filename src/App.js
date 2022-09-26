@@ -6,7 +6,7 @@ import AuthContext from "./store/authContext";
 import AuthModal from "./components/UI/AuthenticationModal";
 import DetailedHabit from "./components/DetailedHabit/DetailedHabit";
 import Enterhabit from "./components/Enterhabit/Enterhabit";
-import UserInfo from "./components/UserInfo/UserInfo";
+import UserInfo from "./components/UserHabit/UserInfo";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
