@@ -1,12 +1,11 @@
+import { async } from "@firebase/util";
 import "./App.css";
 import { firebaseConfig } from "./config/firebase_config";
 import User from "./models/user";
-import { firebaseRegister } from "./services/authentication_service";
+import { firebaseRegister, firebaseSignIn } from "./services/authentication_service";
 
 
-function App() {
-  console.log(firebaseConfig)
-
+async function App() {
   return (
     <div>
       <div>
