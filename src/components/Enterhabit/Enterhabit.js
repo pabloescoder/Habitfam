@@ -1,21 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { css, Button, Grid } from "@nextui-org/react";
 import { Input} from "@nextui-org/react";
-import { gapi } from "gapi-script";
+
 import "./Enterhabit.css"
 
 const Enterhabit = () => {
 
-    useEffect(() => {
-        function start() {
-            gapi.client.init({
-                clientId: "79474543031-tmjo35916ufn421ej3u1i2ljao2apr4s.apps.googleusercontent.com",
-                scope: ""
-            })
-        }
-        gapi.load('client: auth2', start)
-    })
-
+ 
     return (
         <div className="cover">
             
@@ -31,9 +22,9 @@ const Enterhabit = () => {
             <br></br>
             <input type="text" placeholder="Give a description about it" />
             <br></br>
-            <input type="text" placeholder="When do you start?" />
+            <input type="date" placeholder="When do you start?" />
             <br></br>
-            <input type="text" placeholder="For how many days?" />
+            <input type="date" placeholder="For how many days?" />
             <br></br>
             <br></br>
             <div className="create"><Grid.Container gap={2}>

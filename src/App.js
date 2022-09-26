@@ -6,34 +6,30 @@ import { firebaseConfig } from "./config/firebase_config";
 import User from "./models/user";
 import { firebaseRegister } from "./services/authentication_service";
 import Enterhabit from "./components/Enterhabit/Enterhabit";
-import { createHabitGroup, getHabitGroupMembers, getMyHabitGroups } from "./services/database_service";
-
-
-
-async function firebaseIntegration() {
-  const test_user = new User("8jABCPjHG8dhqxsMUJp9V2pAYHy2", "test02@gmail.com");
-  test_user.name = "test one";
-  // console.log(test_user.userMap);
-  // var res = await createHabitGroup(test_user, "DSA", "lorem ipsume debug etc etc", new Date(2022, 10, 26), new Date(2022, 11, 26));
-  // console.log(res);
-
-  var res = await getMyHabitGroups(test_user);
-  var res = await getHabitGroupMembers(res[0]);
-  console.log(res);
-
-}
-
+import UserInfo from "./components/UserInfo/UserInfo";
 function App() {
-  // firebaseIntegration();
+
 
   return (
     <NextUIProvider>
       <Navbar />
+      <div className="page">
+      
+      
+    </div>
+
       {/* <div className="page"> */}
       {/* <Enterhabit /> */}
     {/* </div> */}
+
       <Routes>
         <Route path="/detailed-habit" element={<DetailedHabit />}></Route>
+      </Routes>
+      <Routes>
+        <Route path="/detailed-habit" element={<Enterhabit />}></Route>
+      </Routes>
+      <Routes>
+        <Route path="/detailed-habit" element={<UserInfo />}></Route>
       </Routes>
     </NextUIProvider>
   );
