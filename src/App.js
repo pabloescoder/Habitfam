@@ -6,6 +6,7 @@ import { firebaseConfig } from "./config/firebase_config";
 import User from "./models/user";
 import { firebaseRegister } from "./services/authentication_service";
 import Enterhabit from "./components/Enterhabit/Enterhabit";
+import UserInfo from "./components/UserInfo/UserInfo";
 function App() {
   console.log(firebaseConfig);
 
@@ -13,10 +14,17 @@ function App() {
     <NextUIProvider>
       <Navbar />
       <div className="page">
-      <Enterhabit />
+      
+      
     </div>
       <Routes>
         <Route path="/detailed-habit" element={<DetailedHabit />}></Route>
+      </Routes>
+      <Routes>
+        <Route path="/detailed-habit" element={<Enterhabit />}></Route>
+      </Routes>
+      <Routes>
+        <Route path="/detailed-habit" element={<UserInfo />}></Route>
       </Routes>
     </NextUIProvider>
   );
