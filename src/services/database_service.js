@@ -1,4 +1,4 @@
-import {doc, getDoc, getFirestore, setDoc, addDoc, collection, getDocs, where, query, orderBy} from "firebase/firestore";
+import {doc, getDoc, getFirestore, setDoc, addDoc, collection, getDocs, where, query, orderBy, updateDoc, arrayUnion} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../config/firebase_config";
 import User from "../models/user";
@@ -170,7 +170,6 @@ export async function getMemebersHabitLog(habit) {
  * @param {Date} end 
  * @return {HabitGroup} habitgroup
  */
-
 export async function createHabitGroup(user, habitTitle, habitDescription, start, end) {
     var res;
     await addDoc(collection(db, "habit_group"), {
@@ -194,6 +193,106 @@ export async function createHabitGroup(user, habitTitle, habitDescription, start
     );
 
     return res;
+}
+
+/**
+ * joins the user to a habit_group
+ * @param {User} user user who wants to enroll
+ * @param {String} habit_group_id habit group id
+ * @return {String} result
+ */
+export async function becomeMemeber(user, habit_group_id) {
+    var exit_flag = false;
+    var response = "";
+    // check if already a member
+    await getDocs(
+        query(doc(db, "habit_group", habit_group_id), where("members", "array-contains", user.uid))
+    ).then(
+        (qs) => {
+            if (qs.size > 0) {
+                exit_flag = true;
+                response = "already a member";
+            }
+        }
+    )
+
+    if (exit_flag) {
+        return response;
+    }
+    // add the member
+    await updateDoc(
+        doc(db, "habit_group", habit_group_id), {
+            "members" : arrayUnion(user.uid)
+        }
+    ).then(
+        () => {
+            response = "added to habit group";
+            exit_flag = true;
+        }
+    )
+
+    if (exit_flag) {
+        return response;
+    }
+
+    response = "failed";
+    return response;
+}
+
+/**
+ * adds particular email to habit group
+ * @param {String} email email of user to be added
+ * @param {String} habit_group_id habit group id
+ * @return {String} status
+ */
+export async function addMember(email, habit_group_id) {
+    var exit_flag = false;
+    var res = "";
+    var user_uid = "";
+    // check if user exist
+    await getDocs(
+        query(
+            collection(db, "users"), where(
+                "email" , "==", email
+            )
+        )
+    ).then(
+        (qs) => {
+            if (qs.size < 1) {
+                exit_flag = true;
+                res = "email is not registerd with us";
+            } else {
+                qs.docs.forEach(
+                    (val, index) => {
+                        user_uid = val.id;
+                    }
+                )
+            }
+        }
+    )
+
+    if (exit_flag) {
+        return res;
+    }
+    // add the member to habit group
+    await updateDoc(
+        doc(db, "habit_group", habit_group_id), {
+            "members" : arrayUnion(user_uid)
+        }
+    ).then(
+        () => {
+            response = "added to habit group";
+            exit_flag = true;
+        }
+    )
+
+    if (exit_flag) {
+        return response;
+    }
+
+    response = "failed";
+    return response;
+
 }
 
 /**
