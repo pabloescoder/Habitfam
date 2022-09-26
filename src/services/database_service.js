@@ -1,4 +1,4 @@
-import {doc, getDoc, getFirestore, setDoc, addDoc, collection, getDocs, where, query} from "firebase/firestore";
+import {doc, getDoc, getFirestore, setDoc, addDoc, collection, getDocs, where, query, orderBy} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../config/firebase_config";
 import User from "../models/user";
@@ -104,10 +104,10 @@ export async function getMyHabitGroups(user) {
 }
 
 /**
- * returns detailed profile of habit group members
+ * returns detailed profile of habit group memebers
  * @param {HabitGroup} hbg 
  */
-export function getHabitGroupMembers(hbg) {
+export async function getHabitGroupMembers(hbg) {
     var new_habit_group_members = {};
 
     Object.keys(hbg.habit_group_memebers).forEach(
@@ -119,6 +119,46 @@ export function getHabitGroupMembers(hbg) {
 
     hbg.habit_group_memebers = new_habit_group_members;
     return hbg;
+}
+
+/**
+ * returns the habit log of all the members
+ * @param {HabitGroup} habit 
+ * @return {HabitGroup} habit group with log
+ */
+export async function getMemebersHabitLog(habit) {
+    var new_habit_group_members = habit.habit_group_memebers;
+
+    await getDocs(query(
+        collection("db", "habit_log"), where("habit_group_id", "==", habit.habit_group_id), orderBy("timestamp")
+    )).then(
+        (qs) => {
+
+            qs.forEach(
+                (doc) => {
+                    var curr_log = new HabitLog(
+                        habit.habit_group_id, 
+                        doc.data()["timestamp"],
+                        doc.data()["user"]
+                    );
+
+                    curr_log.logId = doc.id;
+
+                    new_habit_group_members[doc.data()["user"]].habit_log.push(
+                        curr_log
+                    );
+                }
+            )
+        }
+    ).catch(
+        (err) => {
+            console.log(err);
+        }
+    );
+    
+    habit.habit_group_memebers = new_habit_group_members;
+
+    return habit;
 }
 
 /**

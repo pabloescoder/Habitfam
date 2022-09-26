@@ -13,12 +13,14 @@ class HabitLog {
      * 
      * @param {String} habit_group_id habit group id
      * @param {Date} timestamp date of streak
-     * @param {User} user user
+     * @param {String} user user
+     * @param {String} log_id
      */
     constructor(habit_group_id,timestamp, user) {
         this.#habit_group_id = habit_group_id;
         this.#timestamp = timestamp;
         this.#user = user;
+        this.#log_id = "";
     }
 
     get logId() {
