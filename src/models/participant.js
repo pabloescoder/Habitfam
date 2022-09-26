@@ -17,6 +17,7 @@ class HabitGroupMember{
         this.#uid = uid;
         this.#email = email;
         this.#name = name;
+        this.habit_log = []
     }
 
     /**

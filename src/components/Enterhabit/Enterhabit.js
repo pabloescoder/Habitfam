@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Grid } from "@nextui-org/react";
+
 import "./Enterhabit.css";
 
 const Enterhabit = () => {
@@ -21,9 +22,9 @@ const Enterhabit = () => {
       <br></br>
       <input type="text" placeholder="Give a description about it" />
       <br></br>
-      <input type="text" placeholder="When do you start?" />
+      <input type="date" placeholder="When do you start?" />
       <br></br>
-      <input type="text" placeholder="For how many days?" />
+      <input type="date" placeholder="For how many days?" />
       <br></br>
       <br></br>
       <div className="create">
