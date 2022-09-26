@@ -1,0 +1,41 @@
+.leaderboard-container {
+  background-color: #f4eeff;
+  margin-right: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  width: 93%;
+  color: #2a2e4d;
+  border-radius: 16px;
+  height: 80vh;
+}
+
+.leaderboard-container h3 {
+  font-weight: 700;
+  text-align: center;
+  color: #2a2e4d;
+  font-size: 2rem;
+}
+
+.leaderboard-name {
+  text-overflow: ellipsis;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.progress-bar-container {
+  width: 80%;
+  margin-left: 10%;
+  height: 12px;
+  position: relative;
+  border-radius: 50px;
+  border: 1px solid #2a2e4d;
+  margin-bottom: 0.75rem;
+}
+
+.progress-bar {
+  position: absolute;
+  height: 100%;
+  content: "";
+  border-radius: 50px;
+  background-color: #fc5185;
+}
