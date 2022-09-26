@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { firebaseConfig } from "../config/firebase_config";
 import User from "../models/user";
 import { addUserToDatabase, getUserFromDatabase } from "./database_service";
@@ -52,6 +52,21 @@ export async function firebaseRegister(email, password, name) {
             console.log(error);
         }
     );
+
+    return res;
+}
+
+/**
+ * function signs the user out
+ * @returns {boolean} true if success
+ */
+export async function firebaseSignOut() {
+    var res = false;
+    await signOut(auth).then((val) => {
+        res = true;
+    }).catch((err) => {
+        res = false;
+    });
 
     return res;
 }

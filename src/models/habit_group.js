@@ -5,7 +5,7 @@
 class HabitGroup{
     #habit_group_id;
     #founder;
-    #habit_logs = {};
+    #habit_group_members = {};
     #start;
     #end;
 
@@ -17,6 +17,7 @@ class HabitGroup{
      * @param {String} description habit description
      * @param {Date} start start date of habit
      * @param {Date} end end date of habit
+     * @param {Map} habit_group_memebers habit group memeber map
      */
     constructor(habit_group_id, founder, name, description, start, end) {
         this.#founder = founder;
@@ -25,6 +26,7 @@ class HabitGroup{
         this.description = description;
         this.#start = start;
         this.#end = end;
+        this.#habit_group_members = {};
     }
 
     /**
@@ -42,11 +44,16 @@ class HabitGroup{
     }
 
     /**
-     * return habit group logs of current object
+     * return habit group memebers profile of current object
      */
-    get habit_logs() {
-        return this.#habit_logs;
+    get habit_group_memebers() {
+        return this.#habit_group_members;
     }
+
+    set habit_group_memebers(val) {
+        this.#habit_group_members = val;
+    }
+
 
     get startDate() {
         return this.#start;
@@ -56,12 +63,6 @@ class HabitGroup{
         return this.#end;
     }
 
-    /**
-     * Adds habit log of each user
-     */
-    set habit_logs(arg) {
-        this.#habit_logs[arg[0]] = arg[1];
-    }
 }
 
 export default HabitGroup;
